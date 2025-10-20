@@ -125,7 +125,14 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gray-100 text-foreground;
+  }
+  
+  /* Mobile devices - fullscreen */
+  @media (max-width: 768px) {
+    body {
+      @apply bg-white;
+    }
   }
 }
 

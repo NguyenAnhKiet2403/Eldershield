@@ -37,48 +37,50 @@ export default function App() {
 
   return (
     <>
-      <div className="h-screen flex flex-col bg-white max-w-md mx-auto">
-        {/* Header */}
-        <div className="bg-white border-b-2 border-gray-200 p-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-blue-600">ElderShield</h1>
-            <p className="text-[#4a4a4a]">Bảo vệ người thân</p>
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-0 md:p-4">
+        <div className="w-full max-w-md h-screen md:h-[844px] flex flex-col bg-white md:rounded-3xl md:shadow-2xl overflow-hidden">
+          {/* Header */}
+          <div className="bg-white border-b-2 border-gray-200 p-4 flex items-center justify-between">
+            <div>
+              <h1 className="text-blue-600">ElderShield</h1>
+              <p className="text-[#4a4a4a]">Bảo vệ người thân</p>
+            </div>
+            
+            <SettingsDialog>
+              <Button variant="outline" size="sm" className="h-14 w-14 p-0">
+                <Settings className="w-7 h-7" />
+              </Button>
+            </SettingsDialog>
           </div>
-          
-          <SettingsDialog>
-            <Button variant="outline" size="sm" className="h-14 w-14 p-0">
-              <Settings className="w-7 h-7" />
-            </Button>
-          </SettingsDialog>
-        </div>
 
-        {/* Main content */}
-        <div className="flex-1 overflow-y-auto bg-white">
-          {renderContent()}
-        </div>
+          {/* Main content */}
+          <div className="flex-1 overflow-y-auto bg-white">
+            {renderContent()}
+          </div>
 
-        {/* Bottom navigation */}
-        <div className="bg-white border-t-2 border-gray-200 p-2">
-          <div className="flex justify-around gap-2">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <Button
-                  key={tab.id}
-                  variant={isActive ? "default" : "ghost"}
-                  className={`flex-1 min-h-[64px] flex flex-col items-center justify-center gap-1 rounded-2xl ${
-                    isActive 
-                      ? "bg-blue-500 text-white hover:bg-blue-600" 
-                      : "text-[#1a1a1a] hover:bg-gray-100"
-                  }`}
-                  onClick={() => setActiveTab(tab.id)}
-                >
-                  <Icon className="w-7 h-7" />
-                  <span>{tab.label}</span>
-                </Button>
-              );
-            })}
+          {/* Bottom navigation */}
+          <div className="bg-white border-t-2 border-gray-200 p-2">
+            <div className="flex justify-around gap-2">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <Button
+                    key={tab.id}
+                    variant={isActive ? "default" : "ghost"}
+                    className={`flex-1 min-h-[64px] flex flex-col items-center justify-center gap-1 rounded-2xl ${
+                      isActive 
+                        ? "bg-blue-500 text-white hover:bg-blue-600" 
+                        : "text-[#1a1a1a] hover:bg-gray-100"
+                    }`}
+                    onClick={() => setActiveTab(tab.id)}
+                  >
+                    <Icon className="w-7 h-7" />
+                    <span>{tab.label}</span>
+                  </Button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

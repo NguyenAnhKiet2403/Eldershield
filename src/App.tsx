@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Phone, MessageCircle, Users, Heart, Settings } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { PhoneKeypad } from "./components/PhoneKeypad";
@@ -7,11 +7,20 @@ import { ContactsTab } from "./components/ContactsTab";
 import { FamilyTab } from "./components/FamilyTab";
 import { SettingsDialog } from "./components/SettingsDialog";
 import { Toaster } from "./components/ui/sonner";
+import { PermissionRequest, hasRequestedPermissions } from "./components/PermissionRequest";
 
 type TabType = "phone" | "messages" | "contacts" | "family";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>("phone");
+  const [showPermissionRequest, setShowPermissionRequest] = useState(false);
+
+  useEffect(() => {
+    // Check if user has already gone through permission request
+    if (!hasRequestedPermissions()) {
+      setShowPermissionRequest(true);
+    }
+  }, []);
 
   const tabs = [
     { id: "phone" as TabType, label: "Điện thoại", icon: Phone },
@@ -84,6 +93,12 @@ export default function App() {
           </div>
         </div>
       </div>
+
+      {/* Permission request overlay */}
+      {showPermissionRequest && (
+        <PermissionRequest onComplete={() => setShowPermissionRequest(false)} />
+      )}
+
       <Toaster position="top-center" expand={true} richColors />
     </>
   );

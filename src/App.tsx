@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Phone, MessageCircle, Users, Heart, Settings } from "lucide-react";
+import { Phone, MessageCircle, Users, Heart, Settings, ScanLine } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { PhoneKeypad } from "./components/PhoneKeypad";
 import { MessagesTab } from "./components/MessagesTab";
@@ -8,12 +8,14 @@ import { FamilyTab } from "./components/FamilyTab";
 import { SettingsDialog } from "./components/SettingsDialog";
 import { Toaster } from "./components/ui/sonner";
 import { PermissionRequest, hasRequestedPermissions } from "./components/PermissionRequest";
+import { QRScanner } from "./components/QRScanner";
 
 type TabType = "phone" | "messages" | "contacts" | "family";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>("phone");
   const [showPermissionRequest, setShowPermissionRequest] = useState(false);
+  const [showQRScanner, setShowQRScanner] = useState(false);
 
   useEffect(() => {
     // Check if user has already gone through permission request
@@ -30,6 +32,10 @@ export default function App() {
   ];
 
   const renderContent = () => {
+    if (showQRScanner) {
+      return <QRScanner onClose={() => setShowQRScanner(false)} />;
+    }
+
     switch (activeTab) {
       case "phone":
         return <PhoneKeypad />;
@@ -68,11 +74,12 @@ export default function App() {
           </div>
 
           {/* Bottom navigation */}
-          <div className="bg-white border-t-2 border-gray-200 p-2">
-            <div className="flex justify-around gap-2">
-              {tabs.map((tab) => {
+          <div className="bg-white border-t-2 border-gray-200 p-2 relative">
+            <div className="flex justify-around gap-2 items-end">
+              {/* First two tabs */}
+              {tabs.slice(0, 2).map((tab) => {
                 const Icon = tab.icon;
-                const isActive = activeTab === tab.id;
+                const isActive = activeTab === tab.id && !showQRScanner;
                 return (
                   <Button
                     key={tab.id}
@@ -82,7 +89,48 @@ export default function App() {
                         ? "bg-blue-500 text-white hover:bg-blue-600" 
                         : "text-[#1a1a1a] hover:bg-gray-100"
                     }`}
-                    onClick={() => setActiveTab(tab.id)}
+                    onClick={() => {
+                      setShowQRScanner(false);
+                      setActiveTab(tab.id);
+                    }}
+                  >
+                    <Icon className="w-7 h-7" />
+                    <span>{tab.label}</span>
+                  </Button>
+                );
+              })}
+
+              {/* QR Scanner button - elevated */}
+              <div className="flex-1 flex justify-center">
+                <Button
+                  className={`w-16 h-16 rounded-full shadow-lg -mb-8 flex items-center justify-center p-0 ${
+                    showQRScanner
+                      ? "bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+                      : "bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                  }`}
+                  onClick={() => setShowQRScanner(true)}
+                >
+                  <ScanLine className="w-8 h-8 text-white" />
+                </Button>
+              </div>
+
+              {/* Last two tabs */}
+              {tabs.slice(2).map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id && !showQRScanner;
+                return (
+                  <Button
+                    key={tab.id}
+                    variant={isActive ? "default" : "ghost"}
+                    className={`flex-1 min-h-[64px] flex flex-col items-center justify-center gap-1 rounded-2xl ${
+                      isActive 
+                        ? "bg-blue-500 text-white hover:bg-blue-600" 
+                        : "text-[#1a1a1a] hover:bg-gray-100"
+                    }`}
+                    onClick={() => {
+                      setShowQRScanner(false);
+                      setActiveTab(tab.id);
+                    }}
                   >
                     <Icon className="w-7 h-7" />
                     <span>{tab.label}</span>

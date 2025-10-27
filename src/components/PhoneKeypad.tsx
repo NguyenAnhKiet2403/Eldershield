@@ -39,7 +39,7 @@ export function PhoneKeypad() {
   };
 
   const handleOpenDemo = () => {
-    window.open("https://yexiu1103.github.io/ElderShield", "_blank");
+    window.open("https://demo-cuocgoi.vercel.app/", "_blank");
   };
 
   const keypadButtons = [

@@ -571,12 +571,10 @@ export function CallDemo({ onClose }: CallDemoProps) {
           {/* Transcript display */}
           <div className="flex-1 bg-black bg-opacity-30 rounded-2xl p-4 mb-6 overflow-y-auto max-h-[300px]">
             {transcript.length > 0 ? (
-              <div className="space-y-2">
-                {transcript.map((text, index) => (
-                  <div key={index} className="p-3 bg-gray-700 bg-opacity-80 rounded-xl border border-gray-600">
-                    <p className="text-white leading-relaxed">{text}</p>
-                  </div>
-                ))}
+              <div className="p-3 bg-gray-700 bg-opacity-80 rounded-xl border border-gray-600">
+                <p className="text-white leading-relaxed whitespace-pre-wrap">
+                  {transcript.join(' ')}
+                </p>
               </div>
             ) : (
               <p className="text-white opacity-50 text-center">

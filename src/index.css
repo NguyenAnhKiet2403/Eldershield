@@ -1936,6 +1936,10 @@
     white-space: nowrap;
   }
 
+  .whitespace-pre-wrap {
+    white-space: pre-wrap;
+  }
+
   .text-\[\#1a1a1a\] {
     color: #1a1a1a;
   }

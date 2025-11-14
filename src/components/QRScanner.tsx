@@ -20,7 +20,7 @@ const SAFE_QR_CODES = [
 
 const UNSAFE_QR_CODES = [
   "UNSAFE_QR_CODE_1", // Thay bằng nội dung mã QR không an toàn thật
-  "https://xosodaiphat.com/xsmb-xo-so-mien-bac.html",
+  "https://scam-example.com",
   "UNSAFE",
 ];
 

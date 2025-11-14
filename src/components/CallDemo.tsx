@@ -573,8 +573,8 @@ export function CallDemo({ onClose }: CallDemoProps) {
             {transcript.length > 0 ? (
               <div className="space-y-2">
                 {transcript.map((text, index) => (
-                  <div key={index} className="p-3 bg-white bg-opacity-10 rounded-xl">
-                    <p className="text-white">{text}</p>
+                  <div key={index} className="p-3 bg-gray-700 bg-opacity-80 rounded-xl border border-gray-600">
+                    <p className="text-white leading-relaxed">{text}</p>
                   </div>
                 ))}
               </div>

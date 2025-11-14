@@ -14,13 +14,13 @@ type ScanResult = "scanning" | "safe" | "unsafe";
 // Bạn có thể thay đổi các giá trị này sau khi import hình ảnh
 const SAFE_QR_CODES = [
   "SAFE_QR_CODE_1", // Thay bằng nội dung mã QR an toàn thật
-  "https://safe-example.com",
+  "https://chinhphu.vn",
   "SAFE",
 ];
 
 const UNSAFE_QR_CODES = [
   "UNSAFE_QR_CODE_1", // Thay bằng nội dung mã QR không an toàn thật
-  "https://scam-example.com",
+  "https://xosodaiphat.com/xsmb-xo-so-mien-bac.html",
   "UNSAFE",
 ];
 

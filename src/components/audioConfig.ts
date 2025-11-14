@@ -2,14 +2,14 @@
 // Bạn import các file audio vào đây sau
 
 // Import audio files (Uncomment và thay đổi path khi bạn có file)
-// import safeAudio from "../assets/ma-an-toan.mp3";
-// import unsafeAudio from "../assets/ma-lua-dao.mp3";
-// import scamWarningAudio from "../assets/canh-bao-lua-dao.mp3";
+import safeAudio from "ma-an-toan.mp3";
+import unsafeAudio from "ma-lua-dao.mp3";
+import scamWarningAudio from "canh-bao-lua-dao.mp3";
 
 export const AUDIO_FILES = {
-  safe: "/path/to/ma-an-toan.mp3", // Thay bằng: safeAudio khi import
-  unsafe: "/path/to/ma-lua-dao.mp3", // Thay bằng: unsafeAudio khi import
-  scamWarning: "/path/to/canh-bao-lua-dao.mp3", // Thay bằng: scamWarningAudio khi import
+  safe: safeAudio, // Thay bằng: safeAudio khi import
+  unsafe: unsafeAudio, // Thay bằng: unsafeAudio khi import
+  scamWarning: scamWarningAudio, // Thay bằng: scamWarningAudio khi import
 };
 
 // Hàm phát audio với fallback về TTS

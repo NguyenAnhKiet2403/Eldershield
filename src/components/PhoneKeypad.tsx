@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import { Phone, Delete, ExternalLink } from "lucide-react";
+import { Phone, Delete, PlayCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner@2.0.3";
 import {
@@ -12,10 +12,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
+import { CallDemo } from "./CallDemo";
 
 export function PhoneKeypad() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [showCallDemo, setShowCallDemo] = useState(false);
 
   const handleNumberPress = (digit: string) => {
     setPhoneNumber(prev => prev + digit);
@@ -39,7 +41,7 @@ export function PhoneKeypad() {
   };
 
   const handleOpenDemo = () => {
-    window.open("https://demo-cuocgoi.vercel.app/", "_blank");
+    setShowCallDemo(true);
   };
 
   const keypadButtons = [
@@ -106,11 +108,16 @@ export function PhoneKeypad() {
             className="w-full min-h-[64px] border-2 border-purple-300 bg-purple-50 hover:bg-purple-100"
             onClick={handleOpenDemo}
           >
-            <ExternalLink className="w-7 h-7 mr-3" />
+            <PlayCircle className="w-7 h-7 mr-3" />
             Demo cuộc gọi tới
           </Button>
         </div>
       </div>
+
+      {/* Call Demo overlay */}
+      {showCallDemo && (
+        <CallDemo onClose={() => setShowCallDemo(false)} />
+      )}
 
       <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
         <AlertDialogContent className="max-w-md">

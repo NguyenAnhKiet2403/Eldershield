@@ -52,10 +52,10 @@ export default function App() {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-0 md:p-4">
-        <div className="w-full max-w-md h-screen md:h-[844px] flex flex-col bg-white md:rounded-3xl md:shadow-2xl overflow-hidden">
+      <div className="min-h-dvh bg-gray-100 flex items-center justify-center p-0 md:p-4">
+        <div className="w-full max-w-md h-dvh md:h-[844px] flex flex-col bg-white md:rounded-3xl md:shadow-2xl overflow-hidden">
           {/* Header */}
-          <div className="bg-white border-b-2 border-gray-200 p-4 flex items-center justify-between">
+          <div className="bg-white border-b-2 border-gray-200 p-3.5 md:p-4 flex items-center justify-between shrink-0">
             <div>
               <h1 className="text-blue-600">ElderShield</h1>
               <p className="text-[#4a4a4a]">Bảo vệ người thân</p>
@@ -74,8 +74,8 @@ export default function App() {
           </div>
 
           {/* Bottom navigation */}
-          <div className="bg-white border-t-2 border-gray-200 p-2 relative">
-            <div className="flex justify-around gap-2 items-end">
+          <div className="bg-white border-t-2 border-gray-200 p-2 relative shrink-0">
+            <div className="flex justify-around gap-1.5 md:gap-2 items-end">
               {/* First two tabs */}
               {tabs.slice(0, 2).map((tab) => {
                 const Icon = tab.icon;
@@ -84,7 +84,7 @@ export default function App() {
                   <Button
                     key={tab.id}
                     variant={isActive ? "default" : "ghost"}
-                    className={`flex-1 min-h-[64px] flex flex-col items-center justify-center gap-1 rounded-2xl ${
+                    className={`flex-1 min-h-[56px] md:min-h-[64px] flex flex-col items-center justify-center gap-0.5 md:gap-1 rounded-xl md:rounded-2xl ${
                       isActive 
                         ? "bg-blue-500 text-white hover:bg-blue-600" 
                         : "text-[#1a1a1a] hover:bg-gray-100"
@@ -94,8 +94,8 @@ export default function App() {
                       setActiveTab(tab.id);
                     }}
                   >
-                    <Icon className="w-7 h-7" />
-                    <span>{tab.label}</span>
+                    <Icon className="w-6 h-6 md:w-7 md:h-7" />
+                    <span className="text-xs md:text-base leading-tight">{tab.label}</span>
                   </Button>
                 );
               })}
@@ -103,14 +103,14 @@ export default function App() {
               {/* QR Scanner button - elevated */}
               <div className="flex-1 flex justify-center">
                 <Button
-                  className={`w-16 h-16 rounded-full shadow-lg -mb-8 flex items-center justify-center p-0 ${
+                  className={`w-14 h-14 md:w-16 md:h-16 rounded-full shadow-lg -mb-7 md:-mb-8 flex items-center justify-center p-0 ${
                     showQRScanner
                       ? "bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
                       : "bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
                   }`}
                   onClick={() => setShowQRScanner(true)}
                 >
-                  <ScanLine className="w-8 h-8 text-white" />
+                  <ScanLine className="w-7 h-7 md:w-8 md:h-8 text-white" />
                 </Button>
               </div>
 
@@ -122,7 +122,7 @@ export default function App() {
                   <Button
                     key={tab.id}
                     variant={isActive ? "default" : "ghost"}
-                    className={`flex-1 min-h-[64px] flex flex-col items-center justify-center gap-1 rounded-2xl ${
+                    className={`flex-1 min-h-[56px] md:min-h-[64px] flex flex-col items-center justify-center gap-0.5 md:gap-1 rounded-xl md:rounded-2xl ${
                       isActive 
                         ? "bg-blue-500 text-white hover:bg-blue-600" 
                         : "text-[#1a1a1a] hover:bg-gray-100"
@@ -132,8 +132,8 @@ export default function App() {
                       setActiveTab(tab.id);
                     }}
                   >
-                    <Icon className="w-7 h-7" />
-                    <span>{tab.label}</span>
+                    <Icon className="w-6 h-6 md:w-7 md:h-7" />
+                    <span className="text-xs md:text-base leading-tight">{tab.label}</span>
                   </Button>
                 );
               })}

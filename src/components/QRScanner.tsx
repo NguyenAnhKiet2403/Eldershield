@@ -11,33 +11,72 @@ type ScanMode = "demo" | "safe" | "unsafe";
 
 export function QRScanner({ onClose }: QRScannerProps) {
   const [mode, setMode] = useState<ScanMode>("demo");
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
 
-  const speak = (text: string) => {
-    // Cancel any ongoing speech
-    window.speechSynthesis.cancel();
+  // Cấu hình URL file audio của bạn tại đây
+  const audioFiles = {
+    safe: "/path/to/ma-an-toan.mp3", // Thay bằng URL file audio "Mã an toàn"
+    unsafe: "/path/to/ma-lua-dao.mp3", // Thay bằng URL file audio "Mã có khả năng lừa đảo"
+  };
+
+  const playAudio = (type: "safe" | "unsafe") => {
+    // Dừng audio đang phát (nếu có)
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+
+    // Tạo và phát audio mới
+    const newAudio = new Audio(audioFiles[type]);
+    newAudio.volume = 1.0;
+    newAudio.play().catch((error) => {
+      console.error("Lỗi phát audio:", error);
+      // Fallback về Web Speech API nếu không phát được audio
+      const utterance = new SpeechSynthesisUtterance(
+        type === "safe" ? "Mã an toàn" : "Mã có khả năng lừa đảo"
+      );
+      utterance.lang = "vi-VN";
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+      window.speechSynthesis.speak(utterance);
+    });
     
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "vi-VN";
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
-    utterance.volume = 1;
-    window.speechSynthesis.speak(utterance);
+    setAudio(newAudio);
   };
 
   useEffect(() => {
     if (mode === "safe") {
-      speak("Mã an toàn");
+      playAudio("safe");
     } else if (mode === "unsafe") {
-      speak("Mã có khả năng lừa đảo");
+      playAudio("unsafe");
     }
+
+    // Cleanup function
+    return () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    };
   }, [mode]);
 
   const handleBackToDemo = () => {
+    // Dừng audio khi quay lại demo
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
     window.speechSynthesis.cancel();
     setMode("demo");
   };
 
   const handleClose = () => {
+    // Dừng audio khi đóng
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
     window.speechSynthesis.cancel();
     onClose();
   };

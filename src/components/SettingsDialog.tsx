@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription, DialogHeader } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { Settings, User, Phone, LogOut, Shield, ChevronRight } from "lucide-react";
+import { Settings, User, Phone, LogOut, Shield, ChevronRight, Database } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { toast } from "sonner@2.0.3";
 import {
@@ -16,6 +16,9 @@ import {
 import { useState } from "react";
 import { getStoredPermissions, savePermissions, initialPermissions } from "./PermissionRequest";
 import type { Permission } from "./PermissionRequest";
+import { CallDataView } from "./CallDataView";
+
+type ViewState = "main" | "permissions" | "callData";
 
 interface SettingsDialogProps {
   children: React.ReactNode;
@@ -23,7 +26,7 @@ interface SettingsDialogProps {
 
 export function SettingsDialog({ children }: SettingsDialogProps) {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-  const [showPermissions, setShowPermissions] = useState(false);
+  const [currentView, setCurrentView] = useState<ViewState>("main");
   const [permissions, setPermissions] = useState<Permission[]>(getStoredPermissions());
   
   const handleCallSupport = () => {
@@ -75,7 +78,7 @@ export function SettingsDialog({ children }: SettingsDialogProps) {
             </DialogDescription>
           </DialogHeader>
 
-          {!showPermissions ? (
+          {currentView === "main" ? (
             <div className="space-y-6 p-2">
               <div className="text-center space-y-4">
                 <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
@@ -102,11 +105,23 @@ export function SettingsDialog({ children }: SettingsDialogProps) {
                 <Button
                   variant="outline"
                   className="w-full min-h-[64px] justify-between border-2"
-                  onClick={() => setShowPermissions(true)}
+                  onClick={() => setCurrentView("permissions")}
                 >
                   <div className="flex items-center">
                     <Shield className="w-7 h-7 mr-4" />
                     Quản lý quyền truy cập
+                  </div>
+                  <ChevronRight className="w-6 h-6" />
+                </Button>
+
+                <Button
+                  variant="outline"
+                  className="w-full min-h-[64px] justify-between border-2"
+                  onClick={() => setCurrentView("callData")}
+                >
+                  <div className="flex items-center">
+                    <Database className="w-7 h-7 mr-4" />
+                    Dữ liệu cuộc gọi
                   </div>
                   <ChevronRight className="w-6 h-6" />
                 </Button>
@@ -137,13 +152,15 @@ export function SettingsDialog({ children }: SettingsDialogProps) {
                 </p>
               </div>
             </div>
+          ) : currentView === "callData" ? (
+            <CallDataView onBack={() => setCurrentView("main")} />
           ) : (
             <div className="space-y-6 p-2">
               {/* Back button */}
               <Button
                 variant="ghost"
                 className="min-h-[56px] gap-2"
-                onClick={() => setShowPermissions(false)}
+                onClick={() => setCurrentView("main")}
               >
                 <ChevronRight className="w-6 h-6 rotate-180" />
                 Quay lại

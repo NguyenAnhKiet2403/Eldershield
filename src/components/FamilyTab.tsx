@@ -1,218 +1,91 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { ArrowLeft, AlertTriangle, Users, Check, BarChart3 } from "lucide-react";
-import { Alert, AlertDescription } from "./ui/alert";
-import { Checkbox } from "./ui/checkbox";
-import { AnalyticsPage } from "./AnalyticsPage";
-import { toast } from "sonner@2.0.3";
+import { Crown, Heart, Users } from "lucide-react";
+import { FamilyPremiumView } from "./FamilyPremiumView";
+import { FamilyNotificationsView } from "./FamilyNotificationsView";
+import { FamilyFreeView } from "./FamilyFreeView";
 
-interface FamilyMember {
-  id: string;
-  name: string;
-  phone: string;
-  relationship: string;
-}
-
-interface SpamAlert {
-  id: string;
-  memberName: string;
-  type: 'spam_call' | 'scam_message';
-  description: string;
-  time: string;
-}
-
-const allFamilyMembers: FamilyMember[] = [
-  { id: "1", name: "Mẹ", phone: "0912345678", relationship: "Mẹ" },
-  { id: "2", name: "Bố", phone: "0923456789", relationship: "Bố" },
-  { id: "3", name: "Con gái - Lan", phone: "0934567890", relationship: "Con gái" },
-  { id: "4", name: "Con trai - Nam", phone: "0945678901", relationship: "Con trai" },
-  { id: "5", name: "Anh Minh", phone: "0956789012", relationship: "Anh trai" },
-  { id: "6", name: "Chị Hương", phone: "0967890123", relationship: "Em gái" },
-  { id: "7", name: "Cháu Đức", phone: "0978901234", relationship: "Cháu trai" },
-  { id: "8", name: "Cháu Mai", phone: "0989012345", relationship: "Cháu gái" },
-];
-
-const mockSpamAlerts: SpamAlert[] = [
-  {
-    id: "1",
-    memberName: "Con gái - Lan",
-    type: "scam_message",
-    description: "Nhận được tin nhắn giả mạo ngân hàng yêu cầu cung cấp mã PIN",
-    time: "2 giờ trước"
-  },
-  {
-    id: "2",
-    memberName: "Anh Minh",
-    type: "spam_call",
-    description: "Cuộc gọi từ số lạ tự xưng là nhân viên bảo hiểm",
-    time: "Hôm qua"
-  }
-];
+type ViewType = "menu" | "premium" | "notifications" | "free";
 
 export function FamilyTab() {
-  const [showSelection, setShowSelection] = useState(false);
-  const [showAnalytics, setShowAnalytics] = useState(false);
-  const [selectedMembers, setSelectedMembers] = useState<Set<string>>(new Set(["3", "4"])); // Con gái và con trai được chọn mặc định
+  const [currentView, setCurrentView] = useState<ViewType>("menu");
 
-  const handleMemberToggle = (memberId: string) => {
-    const newSelected = new Set(selectedMembers);
-    if (newSelected.has(memberId)) {
-      newSelected.delete(memberId);
-    } else {
-      newSelected.add(memberId);
-    }
-    setSelectedMembers(newSelected);
-  };
-
-  const handleSaveSelection = () => {
-    setShowSelection(false);
-    toast.success("Đã lưu lựa chọn thành công!", { duration: 2000 });
-  };
-
-  const selectedFamilyMembers = allFamilyMembers.filter(member => 
-    selectedMembers.has(member.id)
-  );
-
-  const relevantAlerts = mockSpamAlerts.filter(alert => 
-    selectedFamilyMembers.some(member => member.name === alert.memberName)
-  );
-
-  if (showAnalytics) {
-    return <AnalyticsPage onBack={() => setShowAnalytics(false)} />;
+  if (currentView === "premium") {
+    return <FamilyPremiumView onBack={() => setCurrentView("menu")} />;
   }
 
-  if (showSelection) {
-    return (
-      <div className="h-full">
-        <div className="p-4">
-          {/* Header */}
-          <div className="flex items-center gap-4 mb-6">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowSelection(false)}
-              className="min-h-[56px] min-w-[56px] p-0"
-            >
-              <ArrowLeft className="w-7 h-7" />
-            </Button>
-            <h2>Chọn người thân quan tâm</h2>
-          </div>
-
-          {/* Family members list */}
-          <div className="space-y-3 mb-6">
-            {allFamilyMembers.map((member) => (
-              <div
-                key={member.id}
-                className="p-4 border-2 border-gray-200 rounded-2xl"
-              >
-                <div className="flex items-center gap-4">
-                  <Checkbox
-                    id={member.id}
-                    checked={selectedMembers.has(member.id)}
-                    onCheckedChange={() => handleMemberToggle(member.id)}
-                    className="min-w-[32px] min-h-[32px]"
-                  />
-                  <label htmlFor={member.id} className="flex-1 cursor-pointer">
-                    <h3>{member.name}</h3>
-                    <p className="text-[#4a4a4a]">{member.relationship}</p>
-                    <p className="text-[#4a4a4a]">{member.phone}</p>
-                  </label>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Save button */}
-          <Button
-            onClick={handleSaveSelection}
-            className="w-full min-h-[64px] bg-blue-500 hover:bg-blue-600"
-          >
-            <Check className="w-7 h-7 mr-2" />
-            Lưu lựa chọn
-          </Button>
-        </div>
-      </div>
-    );
+  if (currentView === "notifications") {
+    return <FamilyNotificationsView onBack={() => setCurrentView("menu")} />;
   }
 
+  if (currentView === "free") {
+    return <FamilyFreeView onBack={() => setCurrentView("menu")} />;
+  }
+
+  // Main menu view
   return (
-    <div className="h-full">
-      <div className="p-4">
-        <h2 className="mb-6">Người thân</h2>
-        
-        {/* Action buttons */}
-        <div className="space-y-4 mb-6">
+    <div className="h-full flex flex-col">
+      <div className="flex-1 flex flex-col justify-center p-4">
+        <div className="text-center mb-8">
+          <div className="w-24 h-24 bg-gradient-to-br from-pink-400 to-purple-400 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <Heart className="w-14 h-14 text-white" />
+          </div>
+          <h2 className="mb-2">Người thân</h2>
+          <p className="text-[#4a4a4a]">Chọn chế độ xem bên dưới</p>
+        </div>
+
+        <div className="space-y-4">
+          {/* Button 1: Premium screen */}
           <Button
-            onClick={() => setShowSelection(true)}
-            variant="outline"
-            className="w-full min-h-[64px] border-2 border-blue-300 hover:bg-blue-50"
+            onClick={() => setCurrentView("premium")}
+            className="w-full min-h-[80px] bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-lg flex flex-col gap-1 py-4"
           >
-            <Users className="w-7 h-7 mr-3" />
-            Chọn người thân bạn quan tâm
+            <div className="flex items-center gap-3">
+              <Crown className="w-8 h-8" />
+              <div className="text-left">
+                <div className="leading-tight">Màn hình gói Premium</div>
+                <div className="text-sm opacity-90 leading-tight">Quản lý và theo dõi người thân</div>
+              </div>
+            </div>
           </Button>
-          
+
+          {/* Button 2: Notifications from family */}
           <Button
-            onClick={() => setShowAnalytics(true)}
-            variant="outline"
-            className="w-full min-h-[64px] border-2 border-green-300 hover:bg-green-50"
+            onClick={() => setCurrentView("notifications")}
+            className="w-full min-h-[80px] bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-lg flex flex-col gap-1 py-4"
           >
-            <BarChart3 className="w-7 h-7 mr-3" />
-            Biểu đồ phân tích
+            <div className="flex items-center gap-3">
+              <Heart className="w-8 h-8" />
+              <div className="text-left">
+                <div className="leading-tight">Màn hình người thân</div>
+                <div className="text-sm opacity-90 leading-tight">Tin nhắn từ người được theo dõi</div>
+              </div>
+            </div>
+          </Button>
+
+          {/* Button 3: Free user upgrade screen */}
+          <Button
+            onClick={() => setCurrentView("free")}
+            className="w-full min-h-[80px] bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white shadow-lg flex flex-col gap-1 py-4"
+          >
+            <div className="flex items-center gap-3">
+              <Users className="w-8 h-8" />
+              <div className="text-left">
+                <div className="leading-tight">Màn hình người dùng Free</div>
+                <div className="text-sm opacity-90 leading-tight">Nâng cấp để mở khóa tính năng</div>
+              </div>
+            </div>
           </Button>
         </div>
 
-        {/* Currently selected members */}
-        <div className="mb-6">
-          <h3 className="mb-4">Danh sách quan tâm ({selectedFamilyMembers.length})</h3>
-          {selectedFamilyMembers.length > 0 ? (
-            <div className="space-y-2">
-              {selectedFamilyMembers.map((member) => (
-                <div key={member.id} className="p-3 bg-blue-50 border border-blue-200 rounded-xl">
-                  <div className="flex items-center gap-3">
-                    <div className="min-w-[48px] min-h-[48px] bg-blue-500 rounded-full flex items-center justify-center">
-                      <Users className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <p>{member.name}</p>
-                      <p className="text-[#4a4a4a]">{member.relationship}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-[#4a4a4a]">Chưa chọn ai để quan tâm</p>
-          )}
-        </div>
-
-        {/* Spam alerts */}
-        <div>
-          <h3 className="mb-4">Cảnh báo gần đây</h3>
-          {relevantAlerts.length > 0 ? (
-            <div className="space-y-4">
-              {relevantAlerts.map((alert) => (
-                <Alert key={alert.id} className="border-2 border-orange-300 bg-orange-50">
-                  <AlertTriangle className="h-7 w-7 text-orange-700" />
-                  <AlertDescription>
-                    <div className="space-y-2">
-                      <p className="text-orange-800">
-                        <strong>{alert.memberName}</strong> - {alert.time}
-                      </p>
-                      <p className="text-orange-800">{alert.description}</p>
-                      <p className="text-orange-700">
-                        {alert.type === 'spam_call' ? '📞 Cuộc gọi lừa đảo' : '💬 Tin nhắn lừa đảo'}
-                      </p>
-                    </div>
-                  </AlertDescription>
-                </Alert>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <p className="text-[#4a4a4a]">Không có cảnh báo nào gần đây</p>
-              <p className="text-[#4a4a4a] mt-2">Đây là tin tốt! 😊</p>
-            </div>
-          )}
+        {/* Info text */}
+        <div className="mt-8 p-4 bg-blue-50 border-2 border-blue-200 rounded-2xl text-center">
+          <p className="text-[#1a1a1a]">
+            💡 Đây là trang demo các chế độ
+          </p>
+          <p className="text-[#4a4a4a] mt-2">
+            Chọn một nút để xem giao diện tương ứng
+          </p>
         </div>
       </div>
     </div>

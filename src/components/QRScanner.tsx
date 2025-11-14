@@ -16,7 +16,7 @@ type ScanResult = "scanning" | "safe" | "unsafe";
 // Tất cả các mã khác sẽ được coi là an toàn
 const UNSAFE_QR_CODES = [
   "UNSAFE_QR_CODE_1", // Thay bằng nội dung mã QR không an toàn thật từ import
-  "https://scam-example.com",
+  "00020101021138540010A00000072701240006970418011088833143850208QRIBFTTA53037045802VN6304959C",
   "UNSAFE",
 ];
 

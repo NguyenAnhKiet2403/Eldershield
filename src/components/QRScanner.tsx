@@ -14,7 +14,7 @@ type ScanResult = "scanning" | "safe" | "unsafe";
 // Bạn có thể thay đổi các giá trị này sau khi import hình ảnh
 const SAFE_QR_CODES = [
   "SAFE_QR_CODE_1", // Thay bằng nội dung mã QR an toàn thật
-  "https://chinhphu.vn",
+  "https://get-qr.com/LEC750",
   "SAFE",
 ];
 

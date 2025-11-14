@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Phone, MessageCircle, Users, Heart, Settings, ScanLine } from "lucide-react";
+import { Phone, MessageCircle, Users, Heart, Settings, ScanLine, Maximize, Minimize } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { PhoneKeypad } from "./components/PhoneKeypad";
 import { MessagesTab } from "./components/MessagesTab";
@@ -9,6 +9,7 @@ import { SettingsDialog } from "./components/SettingsDialog";
 import { Toaster } from "./components/ui/sonner";
 import { PermissionRequest, hasRequestedPermissions } from "./components/PermissionRequest";
 import { QRScanner } from "./components/QRScanner";
+import { Switch } from "./components/ui/switch";
 
 type TabType = "phone" | "messages" | "contacts" | "family";
 
@@ -16,12 +17,72 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>("phone");
   const [showPermissionRequest, setShowPermissionRequest] = useState(false);
   const [showQRScanner, setShowQRScanner] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     // Check if user has already gone through permission request
     if (!hasRequestedPermissions()) {
       setShowPermissionRequest(true);
     }
+  }, []);
+
+  // Fullscreen toggle handler
+  const toggleFullscreen = async () => {
+    try {
+      if (!isFullscreen) {
+        // Enter fullscreen
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+          await elem.requestFullscreen();
+        } else if ((elem as any).webkitRequestFullscreen) {
+          await (elem as any).webkitRequestFullscreen();
+        } else if ((elem as any).mozRequestFullScreen) {
+          await (elem as any).mozRequestFullScreen();
+        } else if ((elem as any).msRequestFullscreen) {
+          await (elem as any).msRequestFullscreen();
+        }
+        setIsFullscreen(true);
+      } else {
+        // Exit fullscreen
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if ((document as any).webkitExitFullscreen) {
+          await (document as any).webkitExitFullscreen();
+        } else if ((document as any).mozCancelFullScreen) {
+          await (document as any).mozCancelFullScreen();
+        } else if ((document as any).msExitFullscreen) {
+          await (document as any).msExitFullscreen();
+        }
+        setIsFullscreen(false);
+      }
+    } catch (error) {
+      console.error("Fullscreen error:", error);
+    }
+  };
+
+  // Listen to fullscreen changes (when user exits with ESC key)
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const isCurrentlyFullscreen = !!(
+        document.fullscreenElement ||
+        (document as any).webkitFullscreenElement ||
+        (document as any).mozFullScreenElement ||
+        (document as any).msFullscreenElement
+      );
+      setIsFullscreen(isCurrentlyFullscreen);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
+      document.removeEventListener("mozfullscreenchange", handleFullscreenChange);
+      document.removeEventListener("MSFullscreenChange", handleFullscreenChange);
+    };
   }, []);
 
   const tabs = [
@@ -61,11 +122,27 @@ export default function App() {
               <p className="text-[#4a4a4a]">Bảo vệ người thân</p>
             </div>
             
-            <SettingsDialog>
-              <Button variant="outline" size="sm" className="h-14 w-14 p-0">
-                <Settings className="w-7 h-7" />
-              </Button>
-            </SettingsDialog>
+            <div className="flex items-center gap-2">
+              {/* Fullscreen toggle */}
+              <div className="flex items-center gap-2 bg-gray-100 rounded-full px-3 py-2">
+                {isFullscreen ? (
+                  <Minimize className="w-5 h-5 text-blue-600" />
+                ) : (
+                  <Maximize className="w-5 h-5 text-gray-500" />
+                )}
+                <Switch
+                  checked={isFullscreen}
+                  onCheckedChange={toggleFullscreen}
+                  className="data-[state=checked]:bg-blue-600"
+                />
+              </div>
+
+              <SettingsDialog>
+                <Button variant="outline" size="sm" className="h-14 w-14 p-0">
+                  <Settings className="w-7 h-7" />
+                </Button>
+              </SettingsDialog>
+            </div>
           </div>
 
           {/* Main content */}

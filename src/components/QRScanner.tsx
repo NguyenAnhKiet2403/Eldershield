@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { X, ShieldCheck, ShieldAlert, Camera } from "lucide-react";
 import { motion } from "motion/react";
 import { Html5Qrcode } from "html5-qrcode";
+import { playWarningAudio } from "./audioConfig";
 
 interface QRScannerProps {
   onClose: () => void;
@@ -10,16 +11,11 @@ interface QRScannerProps {
 
 type ScanResult = "scanning" | "safe" | "unsafe";
 
-// Định nghĩa các mã QR an toàn và không an toàn
-// Bạn có thể thay đổi các giá trị này sau khi import hình ảnh
-const SAFE_QR_CODES = [
-  "SAFE_QR_CODE_1", // Thay bằng nội dung mã QR an toàn thật
-  "https://get-qr.com/LEC750",
-  "SAFE",
-];
-
+// Định nghĩa các mã QR không an toàn (blacklist)
+// Chỉ những mã trong danh sách này mới được cảnh báo là không an toàn
+// Tất cả các mã khác sẽ được coi là an toàn
 const UNSAFE_QR_CODES = [
-  "UNSAFE_QR_CODE_1", // Thay bằng nội dung mã QR không an toàn thật
+  "UNSAFE_QR_CODE_1", // Thay bằng nội dung mã QR không an toàn thật từ import
   "https://scam-example.com",
   "UNSAFE",
 ];
@@ -32,12 +28,6 @@ export function QRScanner({ onClose }: QRScannerProps) {
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const isScanning = useRef(false);
 
-  // Cấu hình URL file audio của bạn tại đây
-  const audioFiles = {
-    safe: "/path/to/ma-an-toan.mp3", // Thay bằng URL file audio "Mã an toàn"
-    unsafe: "/path/to/ma-lua-dao.mp3", // Thay bằng URL file audio "Mã có khả năng lừa đảo"
-  };
-
   const playAudio = (type: "safe" | "unsafe") => {
     // Dừng audio đang phát (nếu có)
     if (audio) {
@@ -45,38 +35,21 @@ export function QRScanner({ onClose }: QRScannerProps) {
       audio.currentTime = 0;
     }
 
-    // Tạo và phát audio mới
-    const newAudio = new Audio(audioFiles[type]);
-    newAudio.volume = 1.0;
-    newAudio.play().catch((error) => {
-      console.error("Lỗi phát audio:", error);
-      // Fallback về Web Speech API nếu không phát được audio
-      const utterance = new SpeechSynthesisUtterance(
-        type === "safe" ? "Mã an toàn" : "Mã có khả năng lừa đảo"
-      );
-      utterance.lang = "vi-VN";
-      utterance.rate = 0.9;
-      utterance.pitch = 1;
-      utterance.volume = 1;
-      window.speechSynthesis.speak(utterance);
-    });
+    // Phát audio từ file import
+    const fallbackText = type === "safe" ? "Mã an toàn" : "Mã có khả năng lừa đảo";
+    const newAudio = playWarningAudio(type, fallbackText);
     
     setAudio(newAudio);
   };
 
   const checkQRCode = (decodedText: string): "safe" | "unsafe" => {
-    // Kiểm tra xem mã có trong danh sách an toàn không
-    if (SAFE_QR_CODES.some(code => decodedText.includes(code) || code.includes(decodedText))) {
-      return "safe";
-    }
-    
     // Kiểm tra xem mã có trong danh sách không an toàn không
     if (UNSAFE_QR_CODES.some(code => decodedText.includes(code) || code.includes(decodedText))) {
       return "unsafe";
     }
     
-    // Mặc định: nếu không khớp với bất kỳ mã nào, coi là không an toàn
-    return "unsafe";
+    // Mặc định: tất cả các mã khác đều coi là an toàn
+    return "safe";
   };
 
   const startScanning = async () => {

@@ -14,6 +14,7 @@ import {
 import { Alert, AlertDescription } from "./ui/alert";
 import { toast } from "sonner@2.0.3";
 import type { SavedCallData } from "./CallDataView";
+import { playWarningAudio } from "./audioConfig";
 
 type CallState = 
   | "menu" 
@@ -40,13 +41,10 @@ export function CallDemo({ onClose }: CallDemoProps) {
   const recognitionRef = useRef<any>(null);
   const callTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Text-to-speech function for Vietnamese warning
+  // Play warning audio from imported file
   const speakWarning = (text: string) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'vi-VN';
-    utterance.rate = 0.9;
-    utterance.volume = 1.0;
-    window.speechSynthesis.speak(utterance);
+    // Sử dụng audio file import thay vì TTS
+    playWarningAudio("scamWarning", text);
   };
 
   // Start call timer

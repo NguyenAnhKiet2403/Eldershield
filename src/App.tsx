@@ -74,8 +74,8 @@ export default function App() {
           </div>
 
           {/* Bottom navigation */}
-          <div className="bg-white border-t-2 border-gray-200 p-2 relative shrink-0">
-            <div className="flex justify-around gap-1.5 md:gap-2 items-end">
+          <div className="bg-white border-t-2 border-gray-200 p-1.5 md:p-2 relative shrink-0">
+            <div className="flex justify-around gap-1 md:gap-1.5 items-end">
               {/* First two tabs */}
               {tabs.slice(0, 2).map((tab) => {
                 const Icon = tab.icon;
@@ -84,7 +84,7 @@ export default function App() {
                   <Button
                     key={tab.id}
                     variant={isActive ? "default" : "ghost"}
-                    className={`flex-1 min-h-[56px] md:min-h-[64px] flex flex-col items-center justify-center gap-0.5 md:gap-1 rounded-xl md:rounded-2xl ${
+                    className={`flex-1 min-h-[52px] md:min-h-[60px] flex flex-col items-center justify-center gap-0.5 rounded-xl md:rounded-2xl ${
                       isActive 
                         ? "bg-blue-500 text-white hover:bg-blue-600" 
                         : "text-[#1a1a1a] hover:bg-gray-100"
@@ -94,8 +94,8 @@ export default function App() {
                       setActiveTab(tab.id);
                     }}
                   >
-                    <Icon className="w-6 h-6 md:w-7 md:h-7" />
-                    <span className="text-xs md:text-base leading-tight">{tab.label}</span>
+                    <Icon className="w-5 h-5 md:w-6 md:h-6" />
+                    <span className="text-[11px] md:text-sm leading-tight">{tab.label}</span>
                   </Button>
                 );
               })}
@@ -103,14 +103,14 @@ export default function App() {
               {/* QR Scanner button - elevated */}
               <div className="flex-1 flex justify-center">
                 <Button
-                  className={`w-14 h-14 md:w-16 md:h-16 rounded-full shadow-lg -mb-7 md:-mb-8 flex items-center justify-center p-0 ${
+                  className={`w-13 h-13 md:w-15 md:h-15 rounded-full shadow-lg -mb-5 md:-mb-6 flex items-center justify-center p-0 ${
                     showQRScanner
                       ? "bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
                       : "bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
                   }`}
                   onClick={() => setShowQRScanner(true)}
                 >
-                  <ScanLine className="w-7 h-7 md:w-8 md:h-8 text-white" />
+                  <ScanLine className="w-6 h-6 md:w-7 md:h-7 text-white" />
                 </Button>
               </div>
 
@@ -122,7 +122,7 @@ export default function App() {
                   <Button
                     key={tab.id}
                     variant={isActive ? "default" : "ghost"}
-                    className={`flex-1 min-h-[56px] md:min-h-[64px] flex flex-col items-center justify-center gap-0.5 md:gap-1 rounded-xl md:rounded-2xl ${
+                    className={`flex-1 min-h-[52px] md:min-h-[60px] flex flex-col items-center justify-center gap-0.5 rounded-xl md:rounded-2xl ${
                       isActive 
                         ? "bg-blue-500 text-white hover:bg-blue-600" 
                         : "text-[#1a1a1a] hover:bg-gray-100"
@@ -132,8 +132,8 @@ export default function App() {
                       setActiveTab(tab.id);
                     }}
                   >
-                    <Icon className="w-6 h-6 md:w-7 md:h-7" />
-                    <span className="text-xs md:text-base leading-tight">{tab.label}</span>
+                    <Icon className="w-5 h-5 md:w-6 md:h-6" />
+                    <span className="text-[11px] md:text-sm leading-tight">{tab.label}</span>
                   </Button>
                 );
               })}

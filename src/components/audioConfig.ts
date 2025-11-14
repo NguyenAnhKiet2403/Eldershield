@@ -2,9 +2,9 @@
 // Bạn import các file audio vào đây sau
 
 // Import audio files (Uncomment và thay đổi path khi bạn có file)
-import safeAudio from "ma-an-toan.mp3";
-import unsafeAudio from "ma-lua-dao.mp3";
-import scamWarningAudio from "canh-bao-lua-dao.mp3";
+import safeAudio from "./ma-an-toan.mp3";
+import unsafeAudio from "./ma-lua-dao.mp3";
+import scamWarningAudio from "./canh-bao-lua-dao.mp3";
 
 export const AUDIO_FILES = {
   safe: safeAudio, // Thay bằng: safeAudio khi import
